@@ -6,6 +6,7 @@ using namespace ariel;
 Player::Player(string name){
     this->name = name;
     this->winTurn = 0;
+    this->isInGame = false;
 }
 void Player::addMyCards(Card& card){
     myCards.push_back(card);

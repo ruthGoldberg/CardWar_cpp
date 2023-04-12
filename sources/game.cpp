@@ -12,6 +12,12 @@ using namespace std;
 using namespace ariel;
 
 Game::Game ( Player& player1,  Player& player2):player1_(player1) , player2_(player2){
+    if(player1.getInGame())
+        throw "Player 1 is already in a game";
+    if(player2.getInGame())
+        throw "Player 2 is already in a game";
+    player1.setInGame(true);
+    player2.setInGame(true);
     numOfTurns=0;
     numOfTies=0;
     lastTurn="";
@@ -51,17 +57,22 @@ void Game:: playTurn(){
     static stack<Card> secondPlayerCards;
     static string lasTurn="";
     if(player1_.stacksize() == 0 ){
+        if(count == 0){
+            throw "No more cards left . GAME OVER!";
+        }
         if(count > 0){
             while(!firstPlayerCards.empty()){
-            player1_.addCardsTaken(firstPlayerCards.top());
-            firstPlayerCards.pop();
+                player1_.addCardsTaken(firstPlayerCards.top());
+                firstPlayerCards.pop();
             }
             while(!secondPlayerCards.empty()){
-            player2_.addCardsTaken(secondPlayerCards.top());
-            secondPlayerCards.pop();
+                player2_.addCardsTaken(secondPlayerCards.top());
+                secondPlayerCards.pop();
             }
+            count = 0;
         }
-        throw "No more cards left . GAME OVER!";
+        player1_.setInGame(false) ;
+        player2_.setInGame(false);
         return;
     }
     if(count == 0){
@@ -80,6 +91,7 @@ void Game:: playTurn(){
             player2_.addCardsTaken(secondPlayerCards.top());
             secondPlayerCards.pop();
             }
+            count = 0;
         return;
         }
     }
@@ -143,6 +155,8 @@ void Game::playAll(){
     while(player1_.stacksize() > 0){
         playTurn();
     }
+    player1_.setInGame(false);
+    player2_.setInGame(false);
 }
 void Game::printWiner(){
     if(player1_.stacksize() == 26 ){

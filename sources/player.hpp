@@ -10,6 +10,7 @@ class Player
 {
 private:
     string name;
+    bool isInGame;
     vector<Card> myCards;
     vector<Card> gaindCards;
     int winTurn;
@@ -33,6 +34,13 @@ public:
     }
 
     string getCardsWon();
+
+    bool getInGame()const{
+        return isInGame;
+    }
+    void setInGame(bool isIn){
+        this->isInGame = isIn;
+    }
 
 };
 }
